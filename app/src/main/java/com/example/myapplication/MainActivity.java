@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
                     String username_value = username.getText().toString();
                     String password_value = password.getText().toString();
-                    Toast.makeText(MainActivity.this, username_value, Toast.LENGTH_SHORT).show();
 
                     //POST REQUEST
                     RequestQueue queue = Volley.newRequestQueue(MainActivity.this);

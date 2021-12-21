@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.res.ResourcesCompat;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -37,6 +38,7 @@ public class allNotes extends AppCompatActivity {
     Button logout, add_notes;
     String link, usr;
     JSONArray jarr = new JSONArray();
+
     String c[] = new String[]{"#cfccfc", "#ccfccf", "#ffcffc"};
     int rot[] = new int[]{3,-3,1,-2,1,-2};
     //====================================================
@@ -46,6 +48,36 @@ public class allNotes extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_notes);
+
+        View.OnClickListener del = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RequestQueue queue = Volley.newRequestQueue(allNotes.this);
+                String data = view.getTag().toString();
+                String url = "https://knote-app-api.herokuapp.com/delete-note";
+                JSONObject payload = new JSONObject();
+                try{
+                    payload.put("id", data);
+                }catch(Exception e){
+                    System.out.println("Error in payload");
+                }
+
+                JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, payload, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(allNotes.this, response.optString("msg"), Toast.LENGTH_SHORT).show();
+                        LinearLayout ll = (LinearLayout) findViewById(R.id.data);
+                        ll.removeView(ll.findViewWithTag("Parent"+view.getTag().toString()));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                    }
+                });
+                queue.add(jor);
+            }
+        };
 
         //GETTING NOTES
         link = "https://knote-app-api.herokuapp.com/get-notes";
@@ -67,12 +99,26 @@ public class allNotes extends AppCompatActivity {
                     LinearLayout ll = (LinearLayout) findViewById(R.id.data);
                     jarr = response.getJSONArray("data");
 
-
-
                     for(int i=0;i<jarr.length();i++){
-                        ScrollView sv = new ScrollView(allNotes.this);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 800);
-                        sv.setLayoutParams(layoutParams);
+                        LinearLayout parent = new LinearLayout(allNotes.this);
+                        parent.setTag("Parent"+(jarr.getJSONObject(i).getString("_id")).toString());
+                        parent.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                        parent.setOrientation(LinearLayout.VERTICAL);
+
+                        LinearLayout controls = new LinearLayout(allNotes.this);
+                        controls.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        controls.setOrientation(LinearLayout.HORIZONTAL);
+
+                        Button edit = new Button(allNotes.this);
+                        edit.setText("Edit");
+
+                        Button delete = new Button(allNotes.this);
+                        delete.setTag(jarr.getJSONObject(i).getString("_id"));
+                        delete.setOnClickListener(del);
+                        delete.setText("Delete");
+
+                        controls.addView(edit);
+                        controls.addView(delete);
 
                         LinearLayout.LayoutParams ex = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                         ex.setMargins(60, 40,60, 0);
@@ -92,8 +138,10 @@ public class allNotes extends AppCompatActivity {
                         value.setLayoutParams(ex);
                         value.setElevation(10);
                         value.setMinHeight(800);
-                        sv.addView(value);
-                        ll.addView(sv);
+
+                        parent.addView(value);
+                        parent.addView(controls);
+                        ll.addView(parent);
                     }
                 }
                 catch (Exception e){
