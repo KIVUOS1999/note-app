@@ -129,19 +129,27 @@ public class allNotes extends AppCompatActivity {
                         parent.setOrientation(LinearLayout.VERTICAL);
 
                         LinearLayout controls = new LinearLayout(allNotes.this);
-                        controls.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        LinearLayout.LayoutParams controlsparam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        controlsparam.setMargins(30,60,0,150);
+
+
+
+                        controls.setLayoutParams(controlsparam);
                         controls.setOrientation(LinearLayout.HORIZONTAL);
 
                         Button edit = new Button(allNotes.this);
                         edit.setTag(jarr.getJSONObject(i).getString("_id"));
                         edit.setOnClickListener(edi);
-                        edit.setText("Edit");
+                        edit.setBackgroundResource(R.drawable.edit);
+                        edit.setLayoutParams(new LinearLayout.LayoutParams(110, 110));
 
                         Button delete = new Button(allNotes.this);
                         delete.setTag(jarr.getJSONObject(i).getString("_id"));
                         delete.setOnClickListener(del);
-                        delete.setText("Delete");
-
+                        delete.setBackgroundResource(R.drawable.wrong);
+                        LinearLayout.LayoutParams deleteparams = new LinearLayout.LayoutParams(110, 110);
+                        deleteparams.setMargins(50, 0,0,0);
+                        delete.setLayoutParams(deleteparams);
                         controls.addView(edit);
                         controls.addView(delete);
 
@@ -166,6 +174,7 @@ public class allNotes extends AppCompatActivity {
 
                         parent.addView(value);
                         parent.addView(controls);
+
                         ll.addView(parent);
                     }
                 }
