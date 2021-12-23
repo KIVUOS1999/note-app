@@ -22,7 +22,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:padding="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="20dp"
             android:gravity="center"
@@ -32,9 +32,10 @@
 
             <EditText
                 android:id="@+id/username"
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/patrick"
                 android:hint="Username"
                 android:textColor="#000000"
@@ -43,12 +44,11 @@
                 android:background="@drawable/text_box"/>
 
             <EditText
+                android:padding="10dp"
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/patrick"
                 android:hint="Password"
                 android:inputType="textPassword"
@@ -58,14 +58,13 @@
                 android:background="@drawable/text_box"/>
 
             <EditText
+                android:padding="10dp"
                 android:id="@+id/confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_margin="5dp"
                 android:fontFamily="@font/patrick"
-                android:hint="onfirm Password"
+                android:hint="Confirm Password"
                 android:inputType="textPassword"
                 android:textColor="#000000"
                 android:textSize="16sp"
@@ -76,15 +75,13 @@
                 android:id="@+id/create_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_margin="20dp"
                 android:background="@drawable/button_border_authenticate"
                 android:fontFamily="@font/patrick"
                 android:text="Add User"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                app:iconTint="#000000"
-                app:strokeColor="#000000" />
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -104,6 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/login_account_link"
+                    android:padding="10dp"
                     android:text="Create Here"/>
 
             </LinearLayout>

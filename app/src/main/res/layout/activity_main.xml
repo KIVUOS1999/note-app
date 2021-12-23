@@ -31,10 +31,11 @@
             android:elevation="10dp">
 
             <EditText
+                android:padding="10dp"
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 android:fontFamily="@font/patrick"
                 android:hint="Username"
                 android:textColor="#000000"
@@ -43,12 +44,11 @@
                 android:background="@drawable/text_box"/>
 
             <EditText
+                android:padding="10dp"
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp"
+                android:layout_margin="10dp"
                 android:fontFamily="@font/patrick"
                 android:hint="Password"
                 android:inputType="textPassword"
@@ -61,7 +61,7 @@
                 android:id="@+id/authenticate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_margin="20dp"
                 android:background="@drawable/button_border_authenticate"
                 android:fontFamily="@font/patrick"
                 android:text="Authenticate"
@@ -88,6 +88,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:id="@+id/create_account_link"
                     android:text="Create Here"/>
 
