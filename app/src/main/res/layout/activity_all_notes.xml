@@ -10,6 +10,47 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/edit_text"
+            android:background="@color/design_default_color_secondary"
+            android:visibility="invisible">
+
+            <EditText
+                android:id="@+id/edit_text_data"
+                android:layout_height="400dp"
+                android:layout_width="400dp"
+                android:inputType="textMultiLine"
+                android:textSize="30dp"
+                android:background="#A1A1FF"
+                android:gravity="start|top"
+                android:padding="20dp"
+                android:fontFamily="@font/nothing"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:background="@drawable/button_border_authenticate"
+                    android:id="@+id/edit_text_cancel"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_border_authenticate"
+                    android:text="Done"
+                    android:id="@+id/edit_text_done"/>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:id="@+id/container"
             android:background="@drawable/background"
             >

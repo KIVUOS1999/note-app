@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +25,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.databinding.ActivityAllNotesBinding;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,6 +48,28 @@ public class allNotes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_notes);
 
+        //edit notes
+        View.OnClickListener edi = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout container = findViewById(R.id.container);
+                container.setVisibility(view.INVISIBLE);
+
+                LinearLayout edit_text = findViewById(R.id.edit_text);
+                edit_text.setVisibility(view.VISIBLE);
+
+                findViewById(R.id.edit_text_done).setTag(view.getTag());
+
+                LinearLayout ll = (LinearLayout) findViewById(R.id.data);
+                TextView tb = ll.findViewWithTag("Parent"+view.getTag()).findViewWithTag("TextBox"+view.getTag());
+
+                ((EditText)findViewById(R.id.edit_text_data)).setText(tb.getText().toString());
+            }
+        };
+        //=============================================================
+
+
+        //delete notes
         View.OnClickListener del = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,6 +99,8 @@ public class allNotes extends AppCompatActivity {
                 queue.add(jor);
             }
         };
+        //==========================================================
+
 
         //GETTING NOTES
         link = "https://knote-app-api.herokuapp.com/get-notes";
@@ -110,6 +133,8 @@ public class allNotes extends AppCompatActivity {
                         controls.setOrientation(LinearLayout.HORIZONTAL);
 
                         Button edit = new Button(allNotes.this);
+                        edit.setTag(jarr.getJSONObject(i).getString("_id"));
+                        edit.setOnClickListener(edi);
                         edit.setText("Edit");
 
                         Button delete = new Button(allNotes.this);
@@ -127,7 +152,7 @@ public class allNotes extends AppCompatActivity {
 
                         value.setText(jarr.getJSONObject(i).getString("data"));
                         value.setTextSize(30);
-
+                        value.setTag("TextBox"+(jarr.getJSONObject(i).getString("_id")).toString());
                         value.setPadding(10,10,10,10);
                         value.setBackgroundColor(Color.parseColor(c[i%3]));
 
@@ -160,8 +185,7 @@ public class allNotes extends AppCompatActivity {
 
 
         //LOGOUT LOGIC
-        logout = findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //REMOVING THE user key
@@ -178,14 +202,70 @@ public class allNotes extends AppCompatActivity {
         //==============================================================
 
         //ADD_NOTES
-        add_notes = findViewById(R.id.add_notes);
-        add_notes.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.add_notes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(allNotes.this, add_notes.class);
                 startActivity(intent);
             }
         });
+        //==============================================================
+
+        //edit_text_cancel
+        findViewById(R.id.edit_text_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LinearLayout container = findViewById(R.id.container);
+                container.setVisibility(view.VISIBLE);
+
+                LinearLayout edit_text = findViewById(R.id.edit_text);
+                edit_text.setVisibility(view.INVISIBLE);
+            }
+        });
+        //==============================================================
+
+        //edit_text_done
+        findViewById(R.id.edit_text_done).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject payload = new JSONObject();
+                String url = "https://knote-app-api.herokuapp.com/update-particular-notes";
+                String data = ((EditText)findViewById(R.id.edit_text_data)).getText().toString();
+                String id = view.getTag().toString();
+
+                try{
+                    payload.put("id", id);
+                    payload.put("data", data);
+                    LinearLayout container = findViewById(R.id.container);
+                    container.setVisibility(view.VISIBLE);
+
+                    LinearLayout edit_text = findViewById(R.id.edit_text);
+                    edit_text.setVisibility(view.INVISIBLE);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                RequestQueue queue = Volley.newRequestQueue(allNotes.this);
+                JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, payload, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        LinearLayout ll = (LinearLayout) findViewById(R.id.data);
+                        TextView tb = ll.findViewWithTag("Parent"+view.getTag()).findViewWithTag("TextBox"+view.getTag());
+                        tb.setText(data);
+                        Toast.makeText(allNotes.this, response.optString("data"), Toast.LENGTH_SHORT).show();
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(allNotes.this, "some error occoured", Toast.LENGTH_SHORT).show();
+                        System.out.println(error);
+                    }
+                });
+                queue.add(jor);
+            }
+        });
+
         //==============================================================
     }
 }
